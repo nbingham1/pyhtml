@@ -30,6 +30,18 @@ The document can then be printed.
 print document
 ```
 
+## Instantiating Tags
+
+A `Tag` can be instantiated with any number of content elements and attributes.
+
+```
+mydiv = Div("Hello", "World!", Class="world", Id="hello")
+mydiv2 = Div(Class="world", Id="mydiv2")
+mydiv3 = Div("Hi There!")
+```
+
+An `STag` can't have content elements.
+
 ## Insertion
 
 The `Tag` class supports an insertion operator `<<` which does a few things. First, you can use it to insert content to a tag.
