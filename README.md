@@ -40,6 +40,12 @@ mydiv2 = Div(Class="world", Id="mydiv2")
 mydiv3 = Div("Hi There!")
 ```
 
+For attributes that don't have a value, just set it to True like this:
+
+```
+Script(Async=True, Defer=True)
+```
+
 An `STag` can't have content elements.
 
 ## Insertion
@@ -47,7 +53,7 @@ An `STag` can't have content elements.
 The `Tag` class supports an insertion operator `<<` which does a few things. First, you can use it to insert content to a tag.
 
 ```
-body << "Hello Word!" # insert a string
+body << "Hello World!" # insert a string
 body << Img(Src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/260px-The_Earth_seen_from_Apollo_17.jpg") # insert an img tag
 ```
 
