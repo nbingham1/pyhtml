@@ -1,4 +1,3 @@
-import HTMLParser
 
 # http://stackoverflow.com/a/34120478
 def bsplit(s, d):
@@ -136,33 +135,22 @@ class Tag:
 		
 		return result
 
-class Parser(HTMLParser.HTMLParser):
-	def __init__(self):
-		self.syntax = Html()
-		self.stack = [self.syntax]
-		HTMLParser.HTMLParser.__init__(self)
+class Document(Tag):
+	def __init__(self, *args):
+		Tag.__init__(self, "document", args, dict())
 
-	def handle_starttag(self, tag, attrs):
-		dattrs = dict(attrs)
-		if tag in ["area", "base", "br", "col", 
-							 "command", "embed", "hr", "img", 
-							 "input", "keygen", "link", "meta", 
-							 "param", "source", "track", "wbr"]:
-			if self.stack:
-				self.stack[-1] << STag(tag, dattrs)
-		else:
-			insert = Tag(tag, list(), dattrs)
-			if self.stack:
-				self.stack[-1] << insert
-			self.stack.append(insert)
-
-	def handle_endtag(self, tag):
-		if tag == self.stack[-1].name:
-			self.stack.pop()
-
-	def handle_data(self, data):
-		if self.stack:
-			self.stack[-1] << data
+	def emit(self, tab=""):
+		content_lines = ["Content-type: text/html\r\n\r\n"]
+		for c in self.content:
+			if isinstance(c, Tag):
+				content_lines += c.emit(tab)
+			elif isinstance(c, STag):
+				content_lines += c.emit(tab)
+			elif content_lines:
+				content_lines[-1] += " " + c
+			else:
+				content_lines.append(tab + str(c))
+		return content_lines
 
 class Html(Tag):
 	def __init__(self, *args, **kwargs):
@@ -171,10 +159,6 @@ class Html(Tag):
 			if k not in ["manifest", "xmins"]:
 				print("error: unrecognized attribute '" + k +
 							"' for tag '" + self.name + "'")
-
-	def emit(self, tab=""):
-		return (["Content-type: text/html\r\n\r\n"] +
-			Tag.emit(self, tab))
 
 class Head(Tag):
 	def __init__(self, *args):

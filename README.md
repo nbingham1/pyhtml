@@ -19,9 +19,10 @@ HTML singleton tags of type `STag` don't have a `content` member variable.
 This creates an html `Tag`, then inserts a head and a body `Tag` into it's `content`.
 
 ```
-document = Html()
-head = document << Head()
-body = document << Body()
+document = Document()
+html = Html()
+head = html << Head()
+body = html << Body()
 ```
 
 The document can then be printed.
