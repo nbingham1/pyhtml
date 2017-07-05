@@ -82,3 +82,13 @@ mydiv2 = body("div#mydiv2")
 alldivs = body("div")
 ```
 
+## Parsing
+
+This library also includes an `HTMLParser` implementation that converts directly to an html syntax tree.
+
+```
+parser = Parser()
+with open(filename, 'r') as fptr:
+  parser.feed(fptr.read())
+print parser.syntax
+```
