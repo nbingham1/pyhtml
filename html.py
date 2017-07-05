@@ -32,7 +32,7 @@ class STag:
 	def get(self, Type=None, Class=None, Id=None):
 		return []
 
-	def __call__(self, Str):
+	def __getitem__(self, Str):
 		return []
 	
 	def emit(self, tab = ""):
@@ -83,7 +83,7 @@ class Tag:
 
 		return result
 
-	def __call__(self, Str):
+	def __getitem__(self, Str):
 		Type = None
 		Class = None
 		Id = None
