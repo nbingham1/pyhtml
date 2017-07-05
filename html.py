@@ -1,3 +1,5 @@
+import HTMLParser
+
 # http://stackoverflow.com/a/34120478
 def bsplit(s, d):
 	if not s:
@@ -120,6 +122,8 @@ class Tag:
 				content_lines += c.emit(tab + "\t")
 			elif isinstance(c, STag):
 				content_lines += c.emit(tab + "\t")
+			elif content_lines:
+				content_lines[-1] += c
 			else:
 				content_lines.append(tab + "\t" + str(c))
 
@@ -131,6 +135,34 @@ class Tag:
 			result.append(tab + start_line + end_line)
 		
 		return result
+
+class Parser(HTMLParser.HTMLParser):
+	def __init__(self):
+		self.syntax = Html()
+		self.stack = [self.syntax]
+		HTMLParser.HTMLParser.__init__(self)
+
+	def handle_starttag(self, tag, attrs):
+		dattrs = dict(attrs)
+		if tag in ["area", "base", "br", "col", 
+							 "command", "embed", "hr", "img", 
+							 "input", "keygen", "link", "meta", 
+							 "param", "source", "track", "wbr"]:
+			if self.stack:
+				self.stack[-1] << STag(tag, dattrs)
+		else:
+			insert = Tag(tag, dict(), dattrs)
+			if self.stack:
+				self.stack[-1] << insert
+			self.stack.append(insert)
+
+	def handle_endtag(self, tag):
+		if tag == self.stack[-1].name:
+			self.stack.pop()
+
+	def handle_data(self, data):
+		if self.stack:
+			self.stack[-1] << data
 
 class Html(Tag):
 	def __init__(self, *args, **kwargs):
