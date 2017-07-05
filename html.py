@@ -17,16 +17,16 @@ def bsplit(s, d):
 class STag:
 	def __init__(self,
 							 name,
-							 attrib):
+							 attrs):
 		self.name = name
-		self.attrib = dict((str(k).lower(), v) for k,v in attrib.iteritems())
+		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
 
 	def __str__(self):
 		return "\n".join(self.emit())
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrib.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
 		return other
 
 	def get(self, Type=None, Class=None, Id=None):
@@ -37,7 +37,7 @@ class STag:
 	
 	def emit(self, tab = ""):
 		attrs = []
-		for k,v in self.attrib.iteritems():
+		for k,v in self.attrs.iteritems():
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
@@ -52,17 +52,17 @@ class Tag:
 	def __init__(self,
 							 name,
 							 content,
-							 attrib):
+							 attrs):
 		self.name = name
 		self.content = list(content)
-		self.attrib = dict((str(k).lower(), v) for k,v in attrib.iteritems())
+		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
 
 	def __str__(self):
 		return "\n".join(self.emit())
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrib.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
 		elif isinstance(other, (list, tuple)):
 			self.content += other
 		else:
@@ -74,8 +74,8 @@ class Tag:
 		for item in self.content:
 			if isinstance(item, (Tag, STag)):
 				if ((not Type or item.name == Type) and
-					 (not Class or "class" in item.attrib and item.attrib["class"] == Class) and
-					 (not Id or "id" in item.attrib and item.attrib["id"] == Id)):
+					 (not Class or "class" in item.attrs and item.attrs["class"] == Class) and
+					 (not Id or "id" in item.attrs and item.attrs["id"] == Id)):
 					result.append(item)
 
 			if isinstance(item, Tag):
@@ -104,7 +104,7 @@ class Tag:
 	def emit(self, tab = ""):
 		result = []
 		attrs = []
-		for k,v in self.attrib.iteritems():
+		for k,v in self.attrs.iteritems():
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
@@ -151,7 +151,7 @@ class Parser(HTMLParser.HTMLParser):
 			if self.stack:
 				self.stack[-1] << STag(tag, dattrs)
 		else:
-			insert = Tag(tag, dict(), dattrs)
+			insert = Tag(tag, list(), dattrs)
 			if self.stack:
 				self.stack[-1] << insert
 			self.stack.append(insert)

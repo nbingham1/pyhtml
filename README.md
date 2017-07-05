@@ -10,7 +10,7 @@ from html import *
 
 Each HTML tag is given its own class of the same name but with the first letter capitalized. There are two types of parent classes: `Tag` for HTML tags that must be closed and `STag` for singleton HTML tags that shouldn't be closed.
 
-HTML tags of type `Tag` have `name`, `content`, and `attrib` member variables. `name` stores the name of the tag: 'div' for a `<div></div>` tag, 'script' for a `<script></script>` tag, and so on. `content` is a list that can store strings, `Tag`, and `STag`. `attrib` is a dictionary of HTML attributes.
+HTML tags of type `Tag` have `name`, `content`, and `attrs` member variables. `name` stores the name of the tag: 'div' for a `<div></div>` tag, 'script' for a `<script></script>` tag, and so on. `content` is a list that can store strings, `Tag`, and `STag`. `attrs` is a dictionary of HTML attributes.
 
 HTML singleton tags of type `STag` don't have a `content` member variable.
 
