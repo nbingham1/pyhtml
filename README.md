@@ -97,6 +97,6 @@ print parser.syntax
 If you find this library lacking a tag, you can instantiate custom tags like so:
 
 ```
-print Tag("my-tag", dict(), {"id": "mycooltag"})
+print Tag("my-tag", ["This is the content", " inside the tag!"], {"id": "mycooltag"})
 print STag("my-singleton", {"id": "mycoolsingleton"})
 ```
