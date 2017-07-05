@@ -123,7 +123,7 @@ class Tag:
 			elif isinstance(c, STag):
 				content_lines += c.emit(tab + "\t")
 			elif content_lines:
-				content_lines[-1] += c
+				content_lines[-1] += " " + c
 			else:
 				content_lines.append(tab + "\t" + str(c))
 
