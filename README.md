@@ -92,3 +92,11 @@ with open(filename, 'r') as fptr:
   parser.feed(fptr.read())
 print parser.syntax
 ```
+## Custom Tags
+
+If you find this library lacking a tag, you can instantiate custom tags like so:
+
+```
+print Tag("my-tag", dict(), {"id": "mycooltag"})
+print STag("my-singleton", {"id": "mycoolsingleton"})
+```
