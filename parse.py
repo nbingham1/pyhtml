@@ -34,6 +34,7 @@ def walk(syntax, func, parent=None, left=None):
 	if isinstance(syntax, html.Tag):
 		for i,elem in enumerate(syntax.content):
 			syntax.content[i] = walk(elem, func, syntax, syntax.content[i-1] if i > 0 else None)
-	return func(syntax, parent, left)
-
+		return func(syntax, parent, left)
+	else:
+		return syntax
 
