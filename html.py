@@ -16,9 +16,11 @@ def bsplit(s, d):
 class STag:
 	def __init__(self,
 							 name,
-							 attrs):
+							 attrs,
+							 usr = None):
 		self.name = name
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.usr = usr if usr else {}
 
 	def __str__(self):
 		return "\n".join(self.emit())
@@ -51,10 +53,12 @@ class Tag:
 	def __init__(self,
 							 name,
 							 content,
-							 attrs):
+							 attrs,
+							 usr = None):
 		self.name = name
 		self.content = list(content)
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.usr = usr if usr else {}
 
 	def __str__(self):
 		return "\n".join(self.emit())
