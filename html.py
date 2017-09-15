@@ -28,7 +28,7 @@ class STag:
 	def __lshift__(self, other):
 		if isinstance(other, dict):
 			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
-		return other
+		return self
 
 	def get(self, Type=None, Class=None, Id=None):
 		return []
@@ -70,7 +70,7 @@ class Tag:
 			self.content += other
 		else:
 			self.content.append(other)
-		return other
+		return self
 
 	def get(self, Type=None, Class=None, Id=None):
 		result = []
@@ -122,11 +122,21 @@ class Tag:
 		content_lines = []
 		for c in self.content:
 			if isinstance(c, Tag):
-				content_lines += c.emit(tab + "\t")
+				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup","u"]:
+					if content_lines:
+						content_lines[-1] += "".join(c.emit())
+					else:
+						content_lines.append("".join(c.emit()))
+				else:
+					content_lines += c.emit(tab + "\t")
 			elif isinstance(c, STag):
 				content_lines += c.emit(tab + "\t")
 			elif content_lines:
-				content_lines[-1] += " " + c
+				end = content_lines[-1][-1]
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha():
+					content_lines[-1] += " " + c
+				else:
+					content_lines[-1] += c
 			else:
 				content_lines.append(tab + "\t" + str(c))
 
@@ -191,6 +201,45 @@ class Script(Tag):
 class A(Tag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "a", args, kwargs)
+
+	def emit(self, tab = ""):
+		result = []
+		attrs = []
+		for k,v in self.attrs.iteritems():
+			if isinstance(v, bool) and v:
+				attrs.append(k)
+			else:
+				attrs.append(k + "=\"" + str(v) + "\"")
+		
+		if attrs:
+			start_line = "<" + self.name + " " + " ".join(attrs) + ">"
+		else:
+			start_line = "<" + self.name + ">"
+		end_line = "</" + self.name + ">"
+
+		content_lines = []
+		for c in self.content:
+			if isinstance(c, Tag):
+				content_lines += c.emit()
+			elif isinstance(c, STag):
+				content_lines += c.emit()
+			elif content_lines:
+				end = content_lines[-1][-1]
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha():
+					content_lines.append(" " + c)
+				else:
+					content_lines.append(c)
+			else:
+				content_lines.append(str(c))
+
+		if content_lines:
+			result.append(tab + start_line)
+			result += content_lines
+			result.append(end_line)
+		else:
+			result.append(tab + start_line + end_line)
+		
+		return ["".join(result)]
 
 class Abbr(Tag):
 	def __init__(self, *args, **kwargs):
