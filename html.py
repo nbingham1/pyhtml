@@ -17,13 +17,18 @@ class STag:
 	def __init__(self,
 							 name,
 							 attrs,
-							 usr = None):
+							 usr = None,
+							 inline = False):
 		self.name = name
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
 		self.usr = usr if usr else {}
+		self.inline = inline
 
 	def __str__(self):
-		return "\n".join(self.emit())
+		if self.inline:
+			return "".join(self.emit())
+		else:
+			return "\n".join(self.emit())
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
@@ -54,14 +59,19 @@ class Tag:
 							 name,
 							 content,
 							 attrs,
-							 usr = None):
+							 usr = None,
+							 inline = False):
 		self.name = name
 		self.content = list(content)
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
 		self.usr = usr if usr else {}
+		self.inline = inline
 
 	def __str__(self):
-		return "\n".join(self.emit())
+		if self.inline:
+			return "".join(self.emit())
+		else:
+			return "\n".join(self.emit())
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
@@ -105,6 +115,8 @@ class Tag:
 		return self.get(Type=Type, Class=Class, Id=Id)
 	
 	def emit(self, tab = ""):
+		nexttab = "" if self.inline else tab + "\t"
+
 		result = []
 		attrs = []
 		for k,v in self.attrs.iteritems():
@@ -122,13 +134,13 @@ class Tag:
 		content_lines = []
 		for c in self.content:
 			if isinstance(c, Tag):
-				content_lines += c.emit(tab + "\t")
+				content_lines += c.emit(nexttab)
 			elif isinstance(c, STag):
-				content_lines += c.emit(tab + "\t")
+				content_lines += c.emit(nexttab)
 			elif content_lines:
-				content_lines[-1] += " " + c
+				content_lines[-1] += ("" if self.inline else " ") + c
 			else:
-				content_lines.append(tab + "\t" + str(c))
+				content_lines.append(nexttab + str(c))
 
 		if content_lines:
 			result.append(tab + start_line)

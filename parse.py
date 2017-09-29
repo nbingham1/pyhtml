@@ -15,9 +15,9 @@ class Parser(HTMLParser.HTMLParser):
 							 "input", "keygen", "link", "meta", 
 							 "param", "source", "track", "wbr"]:
 			if self.stack:
-				self.stack[-1] << html.STag(tag, dattrs)
+				self.stack[-1] << html.STag(tag, dattrs, inline=True)
 		else:
-			insert = html.Tag(tag, list(), dattrs)
+			insert = html.Tag(tag, list(), dattrs, inline=True)
 			if self.stack:
 				self.stack[-1] << insert
 			self.stack.append(insert)
@@ -27,8 +27,8 @@ class Parser(HTMLParser.HTMLParser):
 			self.stack.pop()
 
 	def handle_data(self, data):
-		if self.stack and data.strip():
-			self.stack[-1] << data.strip()
+		if self.stack and data:
+			self.stack[-1] << data
 
 def walk(syntax, func, parent=None, left=None):
 	if isinstance(syntax, html.Tag):
