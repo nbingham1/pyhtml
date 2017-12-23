@@ -20,19 +20,22 @@ class STag:
 							 usr = None,
 							 inline = False):
 		self.name = name
-		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.attrs = dict((unicode(k).lower(), unicode(v)) for k,v in attrs.iteritems())
 		self.usr = usr if usr else {}
 		self.inline = inline
 
-	def __str__(self):
+	def __unicode__(self):
 		if self.inline:
 			return "".join(self.emit())
 		else:
 			return "\n".join(self.emit())
 
+	def __str__(self):
+		return unicode(self).encode('utf-8')
+
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((unicode(k).lower(), v) for k,v in other.iteritems())
 		return self
 
 	def get(self, Type=None, Class=None, Id=None):
@@ -47,7 +50,7 @@ class STag:
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
-				attrs.append(k + "=\"" + str(v) + "\"")
+				attrs.append(k + "=\"" + unicode(v) + "\"")
 		
 		if attrs:
 			return [tab + "<" + self.name + " " + " ".join(attrs) + ">"]
@@ -63,19 +66,22 @@ class Tag:
 							 inline = False):
 		self.name = name
 		self.content = list(content)
-		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.attrs = dict((unicode(k).lower(), unicode(v)) for k,v in attrs.iteritems())
 		self.usr = usr if usr else {}
 		self.inline = inline
 
-	def __str__(self):
+	def __unicode__(self):
 		if self.inline:
 			return "".join(self.emit())
 		else:
 			return "\n".join(self.emit())
 
+	def __str__(self):
+		return unicode(self).encode('utf-8')
+
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((unicode(k).lower(), v) for k,v in other.iteritems())
 		elif isinstance(other, (list, tuple)):
 			self.content += other
 		else:
@@ -123,7 +129,7 @@ class Tag:
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
-				attrs.append(k + "=\"" + str(v) + "\"")
+				attrs.append(k + "=\"" + unicode(v) + "\"")
 		
 		if attrs:
 			start_line = "<" + self.name + " " + " ".join(attrs) + ">"
@@ -150,7 +156,7 @@ class Tag:
 				else:
 					content_lines[-1] += c
 			else:
-				content_lines.append(nexttab + str(c))
+				content_lines.append(nexttab + unicode(c))
 
 		if content_lines:
 			result.append(tab + start_line)
@@ -175,7 +181,7 @@ class Document(Tag):
 			elif content_lines:
 				content_lines[-1] += " " + c
 			else:
-				content_lines.append(tab + str(c))
+				content_lines.append(tab + unicode(c))
 		return content_lines
 
 class Html(Tag):
@@ -198,7 +204,7 @@ class Body(Tag):
 
 class Title(Tag):
 	def __init__(self, title, **kwargs):
-		Tag.__init__(self, "title", [str(title)], kwargs)
+		Tag.__init__(self, "title", [unicode(title)], kwargs)
 
 class Link(STag):
 	def __init__(self, **kwargs):
@@ -221,7 +227,7 @@ class A(Tag):
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
-				attrs.append(k + "=\"" + str(v) + "\"")
+				attrs.append(k + "=\"" + unicode(v) + "\"")
 		
 		if attrs:
 			start_line = "<" + self.name + " " + " ".join(attrs) + ">"
@@ -242,7 +248,7 @@ class A(Tag):
 				else:
 					content_lines.append(c)
 			else:
-				content_lines.append(str(c))
+				content_lines.append(unicode(c))
 
 		if content_lines:
 			result.append(tab + start_line)
