@@ -30,6 +30,11 @@ class Parser(HTMLParser.HTMLParser):
 		if self.stack and data:
 			self.stack[-1] << data
 
+	def handle_entityref(self, data):
+		if self.stack and data:
+			self.stack[-1] << self.unescape("&" + data + ";")
+
+
 def walk(syntax, func, parent=None, left=None):
 	if isinstance(syntax, html.Tag):
 		for i,elem in enumerate(syntax.content):
