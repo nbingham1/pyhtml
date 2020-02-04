@@ -140,7 +140,7 @@ class Tag:
 		content_lines = []
 		for c in self.content:
 			if isinstance(c, Tag):
-				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup","u"]:
+				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup", "u", "span"]:
 					if content_lines:
 						content_lines[-1] += "".join(c.emit())
 					else:
