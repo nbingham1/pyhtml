@@ -66,7 +66,7 @@ class Tag:
 							 inline = False):
 		self.name = name
 		self.content = list(content)
-		self.attrs = dict((unicode(k).lower(), unicode(v)) for k,v in attrs.iteritems())
+		self.attrs = dict((unicode(k).lower(), v) for k,v in attrs.iteritems())
 		self.usr = usr if usr else {}
 		self.inline = inline
 
