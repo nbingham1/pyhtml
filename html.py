@@ -93,7 +93,7 @@ class Tag:
 		for item in self.content:
 			if isinstance(item, (Tag, STag)):
 				if ((not Type or item.name == Type) and
-					 (not Class or "class" in item.attrs and item.attrs["class"] == Class) and
+					 (not Class or "class" in item.attrs and Class in item.attrs["class"].split(" ")) and
 					 (not Id or "id" in item.attrs and item.attrs["id"] == Id)):
 					result.append(item)
 
