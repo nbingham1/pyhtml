@@ -1,14 +1,12 @@
-import HTMLParser
 import html
 import css
 
-class Parser(HTMLParser.HTMLParser):
+class Parser(object):
 	def __init__(self):
 		self.syntax = html.Document()
 		self.stack = [self.syntax]
-		HTMLParser.HTMLParser.__init__(self)
 
-	def handle_starttag(self, tag, attrs):
+	def start(self, tag, attrs):
 		dattrs = dict(attrs)
 		if tag in ["area", "base", "br", "col", 
 							 "command", "embed", "hr", "img", 
@@ -22,18 +20,16 @@ class Parser(HTMLParser.HTMLParser):
 				self.stack[-1] << insert
 			self.stack.append(insert)
 
-	def handle_endtag(self, tag):
+	def end(self, tag):
 		if tag == self.stack[-1].name:
 			self.stack.pop()
 
-	def handle_data(self, data):
+	def data(self, data):
 		if self.stack and data:
 			self.stack[-1] << data
 
-	def handle_entityref(self, data):
-		if self.stack and data:
-			self.stack[-1] << self.unescape("&" + data + ";")
-
+	def close(self):
+		return self
 
 def walk(syntax, func, parent=None, left=None):
 	if isinstance(syntax, html.Tag):
