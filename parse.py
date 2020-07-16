@@ -1,5 +1,6 @@
-import html
-import css
+import pyhtml.html as html
+import pyhtml.css as css
+from collections import OrderedDict
 
 class Parser(object):
 	def __init__(self):
@@ -8,6 +9,13 @@ class Parser(object):
 
 	def start(self, tag, attrs):
 		dattrs = dict(attrs)
+		if "style" in dattrs:
+			styles = [prop.split(":") for prop in dattrs["style"].split(";")]
+			dattrs["style"] = css.Style(OrderedDict({
+				key.strip(): value.strip()
+				for key, value in styles
+			}))
+
 		if tag in ["area", "base", "br", "col", 
 							 "command", "embed", "hr", "img", 
 							 "input", "keygen", "link", "meta", 
