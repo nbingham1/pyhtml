@@ -54,7 +54,10 @@ class Style:
 		return result
 
 	def get(self, key):
-		return self.prop[key]
+		if key in self.prop:
+			return self.prop[key]
+		else:
+			return ''
 
 	def set(self, key, value):
 		#if key == "background":
