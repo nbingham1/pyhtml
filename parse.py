@@ -10,7 +10,7 @@ class Parser(object):
 	def start(self, tag, attrs):
 		dattrs = dict(attrs)
 		if "style" in dattrs:
-			styles = [prop.split(":") for prop in dattrs["style"].split(";")]
+			styles = [prop.split(":") for prop in dattrs["style"].split(";") if prop]
 			dattrs["style"] = css.Style(OrderedDict({
 				key.strip(): value.strip()
 				for key, value in styles
