@@ -38,6 +38,9 @@ class STag:
 			self.attrs.update((str(k).lower(), v) for k,v in other.items())
 		return self
 
+	def text(self):
+		return ""
+
 	def get(self, Type=None, Class=None, Id=None):
 		return []
 
@@ -116,6 +119,24 @@ class Tag:
 					Type = i
 
 		return self.get(Type=Type, Class=Class, Id=Id)
+
+	def text(self):
+		content_lines = []
+		for c in self.content:
+			if isinstance(c, Tag):
+				content_lines += c.text()
+			elif isinstance(c, STag):
+				content_lines += c.test()
+			elif content_lines:
+				end = content_lines[-1][-1]
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha() and not self.inline:
+					content_lines.append(" " + str(c))
+				else:
+					content_lines.append(str(c))
+			else:
+				content_lines.append(str(c))
+
+		return "".join(content_lines)
 	
 	def emit(self, tab = ""):
 		nexttab = "" if self.inline else tab + "\t"
