@@ -169,7 +169,7 @@ class Tag:
 				content_lines += c.emit(nexttab)
 			elif content_lines:
 				end = content_lines[-1][-1]
-				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha() and not self.inline:
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c and c[0].isalpha() and not self.inline:
 					content_lines[-1] += " " + c
 				else:
 					content_lines[-1] += c
