@@ -19,7 +19,7 @@ class STag:
 							 attrs,
 							 usr = None):
 		self.name = name
-		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.attrs = dict((str(k).lower(), v) for k,v in attrs.items())
 		self.usr = usr if usr else {}
 
 	def __str__(self):
@@ -27,7 +27,7 @@ class STag:
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((str(k).lower(), v) for k,v in other.items())
 		return other
 
 	def get(self, Type=None, Class=None, Id=None):
@@ -38,7 +38,7 @@ class STag:
 	
 	def emit(self, tab = ""):
 		attrs = []
-		for k,v in self.attrs.iteritems():
+		for k,v in self.attrs.items():
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:
@@ -57,7 +57,7 @@ class Tag:
 							 usr = None):
 		self.name = name
 		self.content = list(content)
-		self.attrs = dict((str(k).lower(), v) for k,v in attrs.iteritems())
+		self.attrs = dict((str(k).lower(), v) for k,v in attrs.items())
 		self.usr = usr if usr else {}
 
 	def __str__(self):
@@ -65,7 +65,7 @@ class Tag:
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
-			self.attrs.update((str(k).lower(), v) for k,v in other.iteritems())
+			self.attrs.update((str(k).lower(), v) for k,v in other.items())
 		elif isinstance(other, (list, tuple)):
 			self.content += other
 		else:
@@ -107,7 +107,7 @@ class Tag:
 	def emit(self, tab = ""):
 		result = []
 		attrs = []
-		for k,v in self.attrs.iteritems():
+		for k,v in self.attrs.items():
 			if isinstance(v, bool) and v:
 				attrs.append(k)
 			else:

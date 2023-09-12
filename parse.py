@@ -1,6 +1,6 @@
-import HTMLParser
-import html
-import css
+import html.parser as HTMLParser
+from . import html
+from . import css
 
 class Parser(HTMLParser.HTMLParser):
 	def __init__(self):
