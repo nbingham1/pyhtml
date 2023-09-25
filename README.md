@@ -28,7 +28,7 @@ body = html << Body()
 The document can then be printed.
 
 ```
-print document
+print(document)
 ```
 
 ## Instantiating Tags
@@ -88,16 +88,20 @@ alldivs = body("div")
 This library also includes an `HTMLParser` implementation that converts directly to an html syntax tree.
 
 ```
-parser = Parser()
+from lxml import etree
+
+...
+
+parser = etree.HTMLParser(target = Parser())
 with open(filename, 'r') as fptr:
-  parser.feed(fptr.read())
-print parser.syntax
+	parser.feed(fptr.read())
+print(parser.close().syntax)
 ```
 ## Custom Tags
 
 If you find this library lacking a tag, you can instantiate custom tags like so:
 
 ```
-print Tag("my-tag", ["This is the content", " inside the tag!"], {"id": "mycooltag"})
-print STag("my-singleton", {"id": "mycoolsingleton"})
+print(Tag("my-tag", ["This is the content", " inside the tag!"], {"id": "mycooltag"}))
+print(STag("my-singleton", {"id": "mycoolsingleton"}))
 ```
