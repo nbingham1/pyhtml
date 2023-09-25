@@ -41,7 +41,7 @@ class Rgba:
 class Style:
 	def __init__(self, prop = OrderedDict()):
 		self.prop = OrderedDict()
-		for key,value in prop.iteritems():
+		for key,value in prop.items():
 			self.set(key, value)
 
 	def __str__(self):
@@ -49,12 +49,15 @@ class Style:
 
 	def emit(self):
 		result = []
-		for key,value in self.prop.iteritems():
+		for key,value in self.prop.items():
 			result.append(str(key) + ": " + str(value) + ";")
 		return result
 
 	def get(self, key):
-		return self.prop[key]
+		if key in self.prop:
+			return self.prop[key]
+		else:
+			return ''
 
 	def set(self, key, value):
 		#if key == "background":
@@ -90,7 +93,7 @@ class Css:
 
 	def emit(self):
 		result = []
-		for selector,style in self.elems.iteritems():
+		for selector,style in self.elems.items():
 			result.append(selector + " {")
 			lines = style.emit()
 			for line in lines:

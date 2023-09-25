@@ -35,6 +35,9 @@ class STag:
 			self.attrs.update((str(k).lower(), v) for k,v in other.items())
 		return self
 
+	def text(self):
+		return ""
+
 	def get(self, Type=None, Class=None, Id=None):
 		return []
 
@@ -87,7 +90,7 @@ class Tag:
 		for item in self.content:
 			if isinstance(item, (Tag, STag)):
 				if ((not Type or item.name == Type) and
-					 (not Class or "class" in item.attrs and item.attrs["class"] == Class) and
+					 (not Class or "class" in item.attrs and Class in item.attrs["class"].split(" ")) and
 					 (not Id or "id" in item.attrs and item.attrs["id"] == Id)):
 					result.append(item)
 
@@ -113,6 +116,24 @@ class Tag:
 					Type = i
 
 		return self.get(Type=Type, Class=Class, Id=Id)
+
+	def text(self):
+		content_lines = []
+		for c in self.content:
+			if isinstance(c, Tag):
+				content_lines += c.text()
+			elif isinstance(c, STag):
+				content_lines += c.test()
+			elif content_lines:
+				end = content_lines[-1][-1]
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha() and not self.inline:
+					content_lines.append(" " + str(c))
+				else:
+					content_lines.append(str(c))
+			else:
+				content_lines.append(str(c))
+
+		return "".join(content_lines)
 	
 	def emit(self, tab = ""):
 		nexttab = "" if self.inline else tab + "\t"
@@ -134,7 +155,7 @@ class Tag:
 		content_lines = []
 		for c in self.content:
 			if isinstance(c, Tag):
-				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup","u"]:
+				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup", "u", "span"]:
 					if content_lines:
 						content_lines[-1] += "".join(c.emit())
 					else:
@@ -145,7 +166,7 @@ class Tag:
 				content_lines += c.emit(nexttab)
 			elif content_lines:
 				end = content_lines[-1][-1]
-				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha() and not self.inline:
+				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c and c[0].isalpha() and not self.inline:
 					content_lines[-1] += " " + c
 				else:
 					content_lines[-1] += c
