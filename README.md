@@ -3,7 +3,7 @@ A simple framework for constructing an HTML document
 
 ## Imports
 ```
-from html import *
+from pyhtml.html import *
 ```
 
 ## Basic Structure
@@ -71,7 +71,7 @@ mydiv = body << Div()
 mydiv << {"id": "mydiv2"}
 ```
 
-`STag` elements also have an assertion operator, but it only allows you to insert attributes. Everything else is ignored.
+`STag` elements also have an insertion operator, but it only allows you to insert attributes. Everything else is ignored.
 
 ## Selectors
 
@@ -89,6 +89,7 @@ This library also includes an `HTMLParser` implementation that converts directly
 
 ```
 from lxml import etree
+from pyhtml.parse import *
 
 ...
 
