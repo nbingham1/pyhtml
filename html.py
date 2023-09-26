@@ -183,6 +183,8 @@ class Tag:
 					content_lines += c.emit(nexttab)
 			elif isinstance(c, STag):
 				content_lines += c.emit(nexttab)
+			elif not isinstance(c, str):
+				content_lines += str(c)
 			elif content_lines:
 				end = content_lines[-1][-1]
 				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c and c[0].isalpha() and not self.inline:
