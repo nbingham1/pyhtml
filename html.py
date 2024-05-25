@@ -102,6 +102,22 @@ class Tag:
 
 		return result
 
+	def find(self, Type=None, Class=None, Id=None):
+		result = []
+		for item in self.content:
+			found = False
+			if isinstance(item, (Tag, STag)):
+				if ((not Type or item.name == Type) and
+					 (not Class or "class" in item.attrs and Class in item.attrs["class"].split(" ")) and
+					 (not Id or "id" in item.attrs and item.attrs["id"] == Id)):
+					result.append(item)
+					found = True
+
+			if not found and isinstance(item, Tag):
+				result += item.find(Type=Type, Class=Class, Id=Id)
+
+		return result
+
 	def __getitem__(self, Str):
 		Type = None
 		Class = None
@@ -126,7 +142,7 @@ class Tag:
 			if isinstance(c, Tag):
 				content_lines += c.text()
 			elif isinstance(c, STag):
-				content_lines += c.test()
+				content_lines += c.text()
 			elif content_lines:
 				end = content_lines[-1][-1]
 				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c[0].isalpha() and not self.inline:
@@ -167,6 +183,8 @@ class Tag:
 					content_lines += c.emit(nexttab)
 			elif isinstance(c, STag):
 				content_lines += c.emit(nexttab)
+			elif not isinstance(c, str):
+				content_lines += str(c)
 			elif content_lines:
 				end = content_lines[-1][-1]
 				if (end.isalpha() or end == '.' or end == ',' or end == ';' or end == '?' or end == '!') and c and c[0].isalpha() and not self.inline:
