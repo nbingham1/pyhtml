@@ -228,7 +228,7 @@ class Document(Tag):
 class Html(Tag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "html", args, kwargs)
-		for k,v in kwargs:
+		for k,v in kwargs.items():
 			if k not in ["manifest", "xmins"]:
 				print("error: unrecognized attribute '" + k +
 							"' for tag '" + self.name + "'")
