@@ -186,11 +186,16 @@ class Tag:
 		return result
 
 class Document(Tag):
-	def __init__(self, *args):
+	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "document", args, dict())
+		self.cookies = kwargs
 
 	def emit(self, tab=""):
-		content_lines = ["Content-type: text/html\r\n\r\n"]
+		content_lines = ["Content-type: text/html"]
+		for key, value in self.cookies.items():
+			content_lines.append(f"Set-Cookie: {key}={value}")
+		content_lines.append("\r\n\r\n")
+
 		for c in self.content:
 			if isinstance(c, Tag):
 				content_lines += c.emit(tab)
