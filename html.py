@@ -712,7 +712,7 @@ class Wbr(Tag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "wbr", args, kwargs)
 
-class Doctype(Tag):
+class Doctype(STag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "!DOCTYPE", args, kwargs)
 
