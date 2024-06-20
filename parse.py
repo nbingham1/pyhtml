@@ -1,5 +1,6 @@
-import pyhtml.html as html
-import pyhtml.css as css
+import html.parser as HTMLParser
+from . import html
+from . import css
 from collections import OrderedDict
 
 class Parser(object):
