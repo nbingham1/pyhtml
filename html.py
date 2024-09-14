@@ -16,13 +16,11 @@ def bsplit(s, d):
 class STag:
 	def __init__(self,
 							 name,
-							 attrs,
-							 usr = None,
-							 inline = False):
+							 attrs):
 		self.name = name
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.items())
-		self.usr = usr if usr else {}
-		self.inline = inline
+		self.usr = attrs[usr] if 'usr' in attrs else {}
+		self.inline = attrs['inline'] if 'inline' in attrs else False
 
 	def __str__(self):
 		if self.inline:
@@ -64,14 +62,12 @@ class Tag:
 	def __init__(self,
 							 name,
 							 content,
-							 attrs,
-							 usr = None,
-							 inline = False):
+							 attrs):
 		self.name = name
 		self.content = list(content)
 		self.attrs = dict((str(k).lower(), v) for k,v in attrs.items())
-		self.usr = usr if usr else {}
-		self.inline = inline
+		self.usr = attrs[usr] if 'usr' in attrs else {}
+		self.inline = attrs['inline'] if 'inline' in attrs else False
 
 	def __str__(self):
 		if self.inline:
@@ -174,7 +170,7 @@ class Tag:
 		content_lines = []
 		for c in self.content:
 			if isinstance(c, Tag):
-				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup", "u", "span"]:
+				if c.name in ["a", "abbr", "address", "b", "em", "i", "q", "small", "sub", "sup", "u", "span", "textarea","pre"]:
 					if content_lines:
 						content_lines[-1] += "".join(c.emit())
 					else:
@@ -583,6 +579,7 @@ class Picture(Tag):
 class Pre(Tag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "pre", args, kwargs)
+		self.inline=True
 
 class Progress(Tag):
 	def __init__(self, *args, **kwargs):
@@ -667,6 +664,7 @@ class Td(Tag):
 class Textarea(Tag):
 	def __init__(self, *args, **kwargs):
 		Tag.__init__(self, "textarea", args, kwargs)
+		self.inline = True
 
 class Tfoot(Tag):
 	def __init__(self, *args, **kwargs):
