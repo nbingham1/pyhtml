@@ -28,8 +28,8 @@ class STag:
 		else:
 			return "\n".join(self.emit())
 
-	def __str__(self):
-		return str(self).encode('utf-8')
+	#def __str__(self):
+	#	return str(self).encode('utf-8')
 
 	def __lshift__(self, other):
 		if isinstance(other, dict):
